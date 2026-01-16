@@ -10,7 +10,6 @@ import type { InvestorMetrics } from "@shared/schema";
 
 export default function InvestorDashboardPage() {
   const [, setLocation] = useLocation();
-  const [, setLocation] = useLocation();
   const { data: metrics, isLoading } = useQuery<InvestorMetrics>({
     queryKey: ["/api/metrics"],
   });

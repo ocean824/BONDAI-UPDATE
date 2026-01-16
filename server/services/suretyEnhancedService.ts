@@ -99,7 +99,7 @@ export async function fileSuretyClaim(data: SuretyClaimData): Promise<SuretyClai
 
 export async function getSuretyClaims(caseId: number): Promise<SuretyClaim[]> {
   const claims: SuretyClaim[] = [];
-  for (const claim of suretyClaims.values()) {
+  for (const claim of Array.from(suretyClaims.values())) {
     if (claim.caseId === caseId) {
       claims.push(claim);
     }
@@ -209,19 +209,19 @@ export async function createReconciliation(
     ));
 
   const calculatedCollateral = collateralRecords.reduce(
-    (sum, r) => sum + parseFloat(r.suretyCollateral.postedAmount || "0"),
+    (sum, r) => sum + parseFloat(r.surety_collateral.postedAmount || "0"),
     0
   );
 
   // Get trust collateral total
   const recordedCollateral = collateralRecords.reduce(
-    (sum, r) => sum + parseFloat(r.suretyCollateral.requiredAmount || "0"),
+    (sum, r) => sum + parseFloat(r.surety_collateral.requiredAmount || "0"),
     0
   );
 
   // Calculate claims paid (from our in-memory store)
   let calculatedClaimsPaid = 0;
-  for (const claim of suretyClaims.values()) {
+  for (const claim of Array.from(suretyClaims.values())) {
     const [claimCase] = await db
       .select()
       .from(suretyCases)
@@ -283,7 +283,7 @@ export async function createReconciliation(
 
 export async function getReconciliations(trustId: number): Promise<SuretyReconciliation[]> {
   const result: SuretyReconciliation[] = [];
-  for (const rec of reconciliations.values()) {
+  for (const rec of Array.from(reconciliations.values())) {
     if (rec.trustId === trustId) {
       result.push(rec);
     }
@@ -365,20 +365,20 @@ export async function generateTrustExposureReport(trustId: number): Promise<Trus
     .where(eq(suretyCases.suretyTrustId, trustId));
 
   const totalCollateralRequired = collateralRecords.reduce(
-    (sum, r) => sum + parseFloat(r.suretyCollateral.requiredAmount || "0"),
+    (sum, r) => sum + parseFloat(r.surety_collateral.requiredAmount || "0"),
     0
   );
-  
+   
   const totalCollateralPosted = collateralRecords
-    .filter(r => r.suretyCollateral.status === "POSTED")
-    .reduce((sum, r) => sum + parseFloat(r.suretyCollateral.postedAmount || "0"), 0);
+    .filter(r => r.surety_collateral.status === "POSTED")
+    .reduce((sum, r) => sum + parseFloat(r.surety_collateral.postedAmount || "0"), 0);
 
   // Claims metrics
   let claimsFiled = 0;
   let claimsPaid = 0;
   let pendingClaims = 0;
 
-  for (const claim of suretyClaims.values()) {
+  for (const claim of Array.from(suretyClaims.values())) {
     const [claimCase] = await db
       .select()
       .from(suretyCases)

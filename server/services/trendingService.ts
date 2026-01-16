@@ -226,18 +226,28 @@ export async function refreshTrendingTopics(opts?: {
     const topic = insertedTopics[i];
     const s = summaries[i];
 
-    const summary: InsertTrendingSummary = {
+    // Ensure bulletPoints is a proper string array
+    const cleanBulletPoints: string[] = [];
+    if (Array.isArray(s.bullet_points)) {
+      for (const bp of s.bullet_points) {
+        if (typeof bp === "string") {
+          cleanBulletPoints.push(bp);
+        }
+      }
+    }
+
+    const summaryData = {
       topicId: topic.id,
       summary: s.summary,
-      bulletPoints: s.bullet_points ?? [],
+      bulletPoints: cleanBulletPoints,
       riskLevel: s.risk_level,
       sentiment: s.sentiment,
       relevanceScore:
         s.relevance_score != null ? String(s.relevance_score) : undefined,
       model: s.model,
     };
-
-    await db.insert(trendingSummaries).values(summary).returning();
+    
+    await db.insert(trendingSummaries).values(summaryData).returning();
   }
 
   // 5) Return final enriched view from DB

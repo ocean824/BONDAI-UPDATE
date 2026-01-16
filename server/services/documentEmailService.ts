@@ -66,7 +66,7 @@ export async function generateDueDiligencePack(bondId: number): Promise<DueDilig
   // Get process documents
   const processDocs = await db
     .select()
-    from(bondProcessDocuments)
+    .from(bondProcessDocuments)
     .where(eq(bondProcessDocuments.bondId, bondId));
 
   for (const pd of processDocs) {

@@ -169,7 +169,7 @@ export async function getTrialBalance(): Promise<
     balance: number;
   }[] = [];
 
-  for (const [accountCode, balance] of postings) {
+  for (const [accountCode, balance] of Array.from(postings.entries())) {
     const lines = journals.flatMap((j) =>
       j.lines.filter((l) => l.accountCode === accountCode)
     );

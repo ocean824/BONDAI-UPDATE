@@ -23,7 +23,8 @@ async function extractTextFromFile(filePath: string, mimeType: string): Promise<
 
   if (mimeType === "application/pdf" || filePath.toLowerCase().endsWith(".pdf")) {
     // Dynamic import for pdf-parse since it doesn't have proper ESM exports
-    const pdfParse = (await import("pdf-parse")).default;
+    const pdfParseModule = await import("pdf-parse") as any;
+    const pdfParse = pdfParseModule.default || pdfParseModule;
     const data = await pdfParse(buffer);
     return data.text || "";
   }

@@ -27,6 +27,7 @@ type AuctionsResponse = {
 
 export default function InvestorExchangePage() {
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
   const [selectedAuction, setSelectedAuction] = useState<Auction | null>(null);
   const [bidAmount, setBidAmount] = useState("");
   const [bidDialogOpen, setBidDialogOpen] = useState(false);

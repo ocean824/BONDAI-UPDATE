@@ -20,6 +20,7 @@ type MyBidsResponse = {
 };
 
 export default function InvestorMyBidsPage() {
+  const [, setLocation] = useLocation();
   const { data, isLoading, error } = useQuery<MyBidsResponse>({
     queryKey: ["/api/investor/my-bids"],
   });

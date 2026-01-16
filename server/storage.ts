@@ -225,14 +225,22 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createBond(bond: InsertBond): Promise<Bond> {
-    const [created] = await db.insert(bonds).values(bond).returning();
+    const bondWithStringFaceValue = {
+      ...bond,
+      faceValue: String(bond.faceValue),
+    };
+    const [created] = await db.insert(bonds).values(bondWithStringFaceValue).returning();
     return created;
   }
 
   async updateBond(id: number, data: Partial<InsertBond>): Promise<Bond> {
+    const dataWithStringFaceValue = {
+      ...data,
+      faceValue: data.faceValue !== undefined ? String(data.faceValue) : undefined,
+    };
     const [updated] = await db
       .update(bonds)
-      .set({ ...data, updatedAt: new Date() })
+      .set({ ...dataWithStringFaceValue, updatedAt: new Date() })
       .where(eq(bonds.id, id))
       .returning();
     return updated;

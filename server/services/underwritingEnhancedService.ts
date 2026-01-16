@@ -231,7 +231,7 @@ export async function generateUnderwritingReport(
   // Fetch case data
   const [underwritingCase] = await db
     .select()
-    from(underwritingCases)
+    .from(underwritingCases)
     .where(eq(underwritingCases.id, caseId));
 
   if (!underwritingCase) return null;

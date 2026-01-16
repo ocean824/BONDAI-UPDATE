@@ -134,7 +134,7 @@ export async function getTradeById(tradeId: number): Promise<TradeRecord | null>
 
 export async function getTradesByInvestor(investorId: number): Promise<TradeRecord[]> {
   const result: TradeRecord[] = [];
-  for (const trade of trades.values()) {
+  for (const trade of Array.from(trades.values())) {
     if (trade.investorId === investorId) {
       result.push(trade);
     }

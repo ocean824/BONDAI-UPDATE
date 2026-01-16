@@ -1,5 +1,5 @@
 import { db } from "../db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 import { bonds, bondAssignments, distributions, users } from "@shared/schema";
 import { createImmutableEvent, type ImmutableEventType } from "./immutableEventService";
 import { postJournalEntry, ACCOUNT_CODES } from "./ledgerService";
@@ -21,7 +21,7 @@ export async function recordReceipt(data: ReceiptData): Promise<typeof distribut
   if (!bond) throw new Error("Bond not found");
 
   // Calculate recoupment status
-  const [existingDistributions] = await db
+  const allExistingDistributions = await db
     .select()
     .from(distributions)
     .where(and(
@@ -29,8 +29,8 @@ export async function recordReceipt(data: ReceiptData): Promise<typeof distribut
       eq(distributions.status, "EXECUTED")
     ));
 
-  const totalRecouped = existingDistributions
-    ? existingDistributions.reduce((sum, d) => sum + parseFloat(String(d.recoupmentAmount)), 0)
+  const totalRecouped = allExistingDistributions
+    ? allExistingDistributions.reduce((sum: number, d: typeof distributions.$inferSelect) => sum + parseFloat(String(d.recoupmentAmount)), 0)
     : 0;
 
   const remainingRecoupment = Math.max(0, RECOUPMENT_THRESHOLD - totalRecouped);
@@ -231,9 +231,9 @@ export async function getInvestorDistributions(investorId: number): Promise<{
     .from(bondAssignments)
     .where(eq(bondAssignments.investorId, investorId));
 
-  const bondIds = [...new Set(investorAssignments.map(a => a.bondId))];
-  
-  const distributions = await db
+  const bondIds = Array.from(new Set(investorAssignments.map(a => a.bondId)));
+   
+  const distributionData = await db
     .select({
       bondId: distributions.bondId,
       bondName: bonds.name,
@@ -246,9 +246,20 @@ export async function getInvestorDistributions(investorId: number): Promise<{
     })
     .from(distributions)
     .innerJoin(bonds, eq(distributions.bondId, bonds.id))
-    .where((d) => bondIds.includes(d.bondId));
+    .where(inArray(distributions.bondId, bondIds));
 
-  return distributions.map(d => ({
+  type DistributionResult = {
+    bondId: number;
+    bondName: string;
+    distributionType: string;
+    totalAmount: number;
+    recoupmentAmount: number;
+    distributionAmount: number;
+    status: string;
+    executedAt: Date | null;
+  };
+
+  return distributionData.map((d): DistributionResult => ({
     bondId: d.bondId,
     bondName: d.bondName || "",
     distributionType: d.distributionType,

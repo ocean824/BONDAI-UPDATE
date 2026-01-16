@@ -397,8 +397,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // PDF → text
         if (mime === "application/pdf" || originalName.endsWith(".pdf")) {
           // Dynamic import for pdf-parse (CommonJS module)
-          const pdfParseModule = await import("pdf-parse");
-          const pdfParse = pdfParseModule.default ?? pdfParseModule;
+          const pdfParseModule = await import("pdf-parse") as any;
+          const pdfParse = pdfParseModule.default || pdfParseModule;
           const parsed = await pdfParse(buffer);
           text = parsed.text || "";
         }
