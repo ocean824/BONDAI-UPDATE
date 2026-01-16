@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
-import { Gavel, Clock, DollarSign } from "lucide-react";
+import { Gavel, Clock, DollarSign, ChevronLeft } from "lucide-react";
 
 type Auction = {
   id: number;
@@ -24,7 +25,7 @@ type AuctionsResponse = {
   auctions: Auction[];
 };
 
-export default function InvestorExchange() {
+export default function InvestorExchangePage() {
   const { toast } = useToast();
   const [selectedAuction, setSelectedAuction] = useState<Auction | null>(null);
   const [bidAmount, setBidAmount] = useState("");

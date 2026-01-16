@@ -1,10 +1,12 @@
+import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { History, DollarSign } from "lucide-react";
+import { History, DollarSign, ChevronLeft } from "lucide-react";
 
 type MyBid = {
   id: number;
@@ -17,7 +19,7 @@ type MyBidsResponse = {
   bids: MyBid[];
 };
 
-export default function InvestorMyBids() {
+export default function InvestorMyBidsPage() {
   const { data, isLoading, error } = useQuery<MyBidsResponse>({
     queryKey: ["/api/investor/my-bids"],
   });

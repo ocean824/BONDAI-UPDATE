@@ -33,7 +33,8 @@ import {
   type BondProcessStep
 } from "./services/documentEngineService";
 import { createTradeFromAuction } from "./services/tradeService";
-import { auctions, auctionBids, suretyTrusts, suretyCases, suretyCollateral, bondProcessDocuments } from "@shared/schema";
+import { sendEmail, getEmailQueue, processEmailQueue } from "./services/documentEmailService";
+import { auctions, auctionBids, suretyTrusts, suretyCases, suretyCollateral, bondProcessDocuments, bonds } from "@shared/schema";
 import { eq, desc, and, lt, gt } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { z } from "zod";

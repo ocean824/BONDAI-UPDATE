@@ -1,8 +1,10 @@
+import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { TrendingUp, Clock, Calendar } from "lucide-react";
+import { TrendingUp, Clock, Calendar, ChevronLeft } from "lucide-react";
 
 type OverviewTotals = {
   totals: {
@@ -12,7 +14,8 @@ type OverviewTotals = {
   };
 };
 
-export default function InvestorOverview() {
+export default function InvestorOverviewPage() {
+  const [, setLocation] = useLocation();
   const { data, isLoading, error } = useQuery<OverviewTotals>({
     queryKey: ["/api/investor/overview"],
   });

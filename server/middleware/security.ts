@@ -77,7 +77,7 @@ export const securityHeaders = helmet({
 
 // CORS configuration
 export const corsOptions: cors.CorsOptions = {
-  origin: function (origin, callback) {
+  origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void): void {
     // Allow requests with no origin (mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
     
@@ -181,7 +181,7 @@ export function errorHandler(
 
 // ===== REQUEST LOGGING =====
 
-export function requestLogger(req: Request, _res: Response, next: NextFunction) {
+export function requestLogger(req: Request, res: Response, next: NextFunction) {
   const requestId = crypto.randomUUID().substring(0, 8);
   const start = Date.now();
 

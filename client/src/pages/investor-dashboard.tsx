@@ -1,11 +1,15 @@
+import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TrendingUp, DollarSign, Package, FileText, Shield } from "lucide-react";
+import { TrendingUp, DollarSign, Package, FileText, Shield, ChevronLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { InvestorMetrics } from "@shared/schema";
 
 export default function InvestorDashboardPage() {
+  const [, setLocation] = useLocation();
   const [, setLocation] = useLocation();
   const { data: metrics, isLoading } = useQuery<InvestorMetrics>({
     queryKey: ["/api/metrics"],
