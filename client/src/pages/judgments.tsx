@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,11 +11,12 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, FileText, DollarSign, TrendingUp, Shield, Plus } from "lucide-react";
+import { Upload, FileText, DollarSign, TrendingUp, Shield, Plus, ChevronLeft } from "lucide-react";
 import { JudgmentDocDropzone } from "@/components/judgment-doc-dropzone";
 import type { Judgment, PricingScenario } from "@shared/schema";
 
 export default function JudgmentsPage() {
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [selectedJudgment, setSelectedJudgment] = useState<Judgment | null>(null);
   const [showPricing, setShowPricing] = useState(false);
@@ -82,6 +84,20 @@ export default function JudgmentsPage() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
+      {/* Back Navigation */}
+      <div className="flex items-center gap-2 mb-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setLocation("/")}
+          className="gap-1 pl-0 hover:pl-1 transition-all"
+          data-testid="button-back"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Dashboard
+        </Button>
+      </div>
+
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-semibold mb-2">Judgments</h1>

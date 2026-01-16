@@ -50,6 +50,20 @@ export default function InvestorOverview() {
 
   return (
     <div className="p-6 space-y-6" data-testid="page-investor-overview">
+      {/* Back Navigation */}
+      <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setLocation("/")}
+          className="gap-1 pl-0 hover:pl-1 transition-all"
+          data-testid="button-back"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Dashboard
+        </Button>
+      </div>
+
       <div>
         <h1 className="text-2xl font-bold" data-testid="text-page-title">Bond Exchange Overview</h1>
         <p className="text-muted-foreground">

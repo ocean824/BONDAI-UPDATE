@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import type { InvestorMetrics } from "@shared/schema";
 
 export default function InvestorDashboardPage() {
+  const [, setLocation] = useLocation();
   const { data: metrics, isLoading } = useQuery<InvestorMetrics>({
     queryKey: ["/api/metrics"],
   });
@@ -78,6 +79,20 @@ export default function InvestorDashboardPage() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-8">
+      {/* Back Navigation */}
+      <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setLocation("/")}
+          className="gap-1 pl-0 hover:pl-1 transition-all"
+          data-testid="button-back"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Dashboard
+        </Button>
+      </div>
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-semibold mb-2">Investor Metrics</h1>

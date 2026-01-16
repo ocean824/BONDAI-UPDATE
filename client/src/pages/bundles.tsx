@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,10 +12,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Package, Plus, FileText, DollarSign, Trash2, Download } from "lucide-react";
+import { Package, Plus, FileText, DollarSign, Trash2, Download, ChevronLeft } from "lucide-react";
 import type { Bundle, Judgment, BundleWithJudgments } from "@shared/schema";
 
 export default function BundlesPage() {
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [selectedBundle, setSelectedBundle] = useState<Bundle | null>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -138,6 +140,20 @@ export default function BundlesPage() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
+      {/* Back Navigation */}
+      <div className="flex items-center gap-2 mb-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setLocation("/")}
+          className="gap-1 pl-0 hover:pl-1 transition-all"
+          data-testid="button-back"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Dashboard
+        </Button>
+      </div>
+
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-semibold mb-2">Bundle Builder</h1>

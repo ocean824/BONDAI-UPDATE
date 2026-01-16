@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -128,6 +129,7 @@ function computePreviewMetrics(caseInput: UnderwritingCaseInput, parties: Underw
 }
 
 export default function UnderwritingPage() {
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [activeView, setActiveView] = useState<"create" | "saved">("create");
 
@@ -190,6 +192,20 @@ export default function UnderwritingPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="p-6 max-w-7xl mx-auto space-y-6">
+        {/* Back Navigation */}
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setLocation("/")}
+            className="gap-1 pl-0 hover:pl-1 transition-all"
+            data-testid="button-back"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Back to Dashboard
+          </Button>
+        </div>
+
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Underwriting</h1>

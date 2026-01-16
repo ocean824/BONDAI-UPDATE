@@ -1,5 +1,6 @@
 // client/src/pages/bonds.tsx
 import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -15,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { ArrowLeft, ChevronLeft } from "lucide-react";
 
 type Bond = {
   id: number;
@@ -138,6 +140,7 @@ function formatBondScore(score: number | null): string {
 }
 
 export default function BondsPage() {
+  const [, setLocation] = useLocation();
   const { toast } = useToast();
 
   const [bonds, setBonds] = useState<Bond[]>([]);
@@ -571,6 +574,20 @@ export default function BondsPage() {
 
   return (
     <div className="space-y-6">
+      {/* Back Navigation */}
+      <div className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setLocation("/")}
+          className="gap-1 pl-0 hover:pl-1 transition-all"
+          data-testid="button-back"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Dashboard
+        </Button>
+      </div>
+
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Bonds</h1>
         <p className="text-muted-foreground">
